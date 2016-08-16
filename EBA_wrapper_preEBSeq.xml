@@ -1,0 +1,47 @@
+<tool id="preEBSeq" name="Preprocess files for EBSeq" version="0.1.0">
+    <description>Generate expression matrix and IGvector file for EBSeq</description>
+    <command interpreter="python">
+        pre_EBSeq.py
+        --outtable=$outtable
+        --outvector=$outvector
+        #for $i, $input in enumerate ( $batch_condition.levels ):
+            #for $j, $input_rep in enumerate ($input.rep_counts ):
+                --inputs  "${input_rep.count_data}" "${input_rep.label}"
+            #end for
+        #end for
+
+    </command>
+    <inputs>
+        <repeat name="rep_counts" title="Raw counts" min="2">
+            <param name="count_data" type="data" format="txt" label="Raw count"/>
+            <param name="label" format="txt" type="text" value="file1" label="File label name" help="You need to specify an unique label name for your replicates.">
+                <sanitizer>
+                    <valid initial="string.letters,string.digits">
+                        <add value="_" />
+                    </valid>
+                    <mapping initial="none">
+                        <add source=" " target="_"/>
+                    </mapping>
+                </sanitizer>
+            </param>
+        </repeat>
+
+    </inputs>
+
+    <outputs>
+        <data format="tabular" name="outtable" label="Expression matrix (on ${on_string})" />
+        <data format="tabular" name="outvector" label="IGvector file (on ${on_string})"/>
+    </outputs>
+    <tests>
+        <test>
+
+        </test>
+    </tests>
+    <help>
+-----------
+Description
+-----------
+Build Expression Table and IGvector fles from RSEM output to EBSeq input
+
+    </help>
+</tool>
